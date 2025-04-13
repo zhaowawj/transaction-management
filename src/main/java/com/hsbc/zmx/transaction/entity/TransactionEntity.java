@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "transaction", indexes = { @Index(name = "idx_transaction_id", columnList = "transaction_id") })
+@Table(name = "transaction", indexes = {@Index(name = "idx_transaction_id", columnList = "transaction_id"), @Index(name = "idx_client_id", columnList = "client_id")})
 @Setter
 @Getter
 public class TransactionEntity {
