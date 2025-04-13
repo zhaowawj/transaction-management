@@ -1,0 +1,11 @@
+{
+  "transactionId": "TXN000001",
+  "type": "DEPOSIT",
+  "clientId": "CLIENT789",
+  "accountNumber": "ACC12345",
+  "transactionAmount": 1000.00,
+  "serviceCharge": 5.00,
+  "status": "CREATED",
+  "peerAccountNumber": "ACC67890",
+  "peerAccountName": "John Doe"
+}

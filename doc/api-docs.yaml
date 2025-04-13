@@ -1,0 +1,242 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+paths:
+  /transactions:
+    get:
+      tags:
+      - transaction-controller
+      operationId: listTransactions
+      parameters:
+      - name: pageIndex
+        in: query
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+          format: int32
+          default: 1
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          maximum: 200
+          minimum: 1
+          type: integer
+          format: int32
+          default: 10
+      - name: clientId
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: type
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: transactionId
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: createTimeStart
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: createTimeEnd
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiBaseResponseVoid"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiBaseResponseListTransactionsResponse"
+    put:
+      tags:
+      - transaction-controller
+      operationId: updateTransaction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionModel"
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiBaseResponseVoid"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiBaseResponseTransactionModel"
+    post:
+      tags:
+      - transaction-controller
+      operationId: createTransaction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionModel"
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiBaseResponseVoid"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiBaseResponseVoid"
+  /transactions/{transactionId}:
+    get:
+      tags:
+      - transaction-controller
+      operationId: getTransaction
+      parameters:
+      - name: transactionId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiBaseResponseVoid"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiBaseResponseTransactionModel"
+    delete:
+      tags:
+      - transaction-controller
+      operationId: deleteTransaction
+      parameters:
+      - name: transactionId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiBaseResponseVoid"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiBaseResponseVoid"
+components:
+  schemas:
+    ApiBaseResponseVoid:
+      type: object
+      properties:
+        errCode:
+          type: string
+        errMsg:
+          type: string
+        data:
+          type: object
+    TransactionModel:
+      required:
+      - accountNumber
+      - clientId
+      - transactionId
+      - type
+      type: object
+      properties:
+        transactionId:
+          type: string
+        type:
+          type: string
+        clientId:
+          type: string
+        accountNumber:
+          type: string
+        transactionAmount:
+          minimum: 0
+          exclusiveMinimum: true
+          type: number
+        serviceCharge:
+          minimum: 0
+          type: number
+        status:
+          type: string
+        peerAccountNumber:
+          type: string
+        peerAccountName:
+          type: string
+        version:
+          type: integer
+          format: int32
+    ApiBaseResponseTransactionModel:
+      type: object
+      properties:
+        errCode:
+          type: string
+        errMsg:
+          type: string
+        data:
+          $ref: "#/components/schemas/TransactionModel"
+    ApiBaseResponseListTransactionsResponse:
+      type: object
+      properties:
+        errCode:
+          type: string
+        errMsg:
+          type: string
+        data:
+          $ref: "#/components/schemas/ListTransactionsResponse"
+    ListTransactionsResponse:
+      type: object
+      properties:
+        transactions:
+          type: array
+          items:
+            $ref: "#/components/schemas/TransactionModel"
+        pageIndex:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        totalCount:
+          type: integer
+          format: int64
+        totalPage:
+          type: integer
+          format: int32
